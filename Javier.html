@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy Birthday</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --pink:      #ffd7e6;
+    --pink-deep: #ff8fab;
+    --lav:       #e6dcfb;
+    --mint:      #d3f5e0;
+    --cream:     #fffaf3;
+    --ink:       #4a3a5a;
+    --ink-soft:  #8b7a9c;
+    --hot:       #ff5f8f;
+    --line:      rgba(74,58,90,0.12);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    margin:0;
+    min-height:100svh;
+    background-image: url('assets/stars-bg.jpg');
+    background-repeat:repeat;
+    background-size:300px auto;
+    background-color: var(--cream);
+    color:var(--ink);
+    font-family:'Quicksand', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+
+  h1,h2,.cute{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    margin:0;
+    color:var(--ink);
+  }
+
+  .wrap{
+    max-width:520px;
+    margin:0 auto;
+    padding:0 22px;
+  }
+
+  section{ padding:64px 0; }
+
+  .card{
+    background:rgba(255,250,243,0.92);
+    backdrop-filter:blur(6px);
+    border:2px solid var(--line);
+    border-radius:26px;
+    padding:32px 26px;
+    box-shadow:0 10px 30px rgba(74,58,90,0.08);
+  }
+
+  /* ---------- hero ---------- */
+  #hero{
+    min-height:92svh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:40px 22px;
+    position:relative;
+    z-index:1;
+  }
+  #hero .for{
+    font-family:'Baloo 2', sans-serif;
+    color:var(--hot);
+    font-size:1.05rem;
+    margin-bottom:10px;
+  }
+  #hero h1{
+    font-size:clamp(2.2rem, 9vw, 3.4rem);
+    line-height:1.15;
+  }
+  #hero h1 .name{ color:var(--hot); }
+  #hero .sub{
+    margin-top:18px;
+    max-width:320px;
+    color:var(--ink-soft);
+    font-size:1rem;
+  }
+  #hero .cta{
+    margin-top:36px;
+    background:var(--hot);
+    color:#fff;
+    border:none;
+    font-family:'Baloo 2', sans-serif;
+    font-size:1rem;
+    padding:14px 30px;
+    border-radius:40px;
+    cursor:pointer;
+    box-shadow:0 8px 20px rgba(255,95,143,0.35);
+    transition:transform .2s;
+  }
+  #hero .cta:hover{ transform:translateY(-2px) scale(1.03); }
+
+  /* ---------- love notes ---------- */
+  .note-title{
+    text-align:center;
+    font-size:1.7rem;
+    margin-bottom:26px;
+  }
+  .note-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px; }
+  .note-list li{
+    background:var(--pink);
+    border-radius:16px;
+    padding:14px 18px;
+    font-size:.98rem;
+  }
+  .note-list li:nth-child(3n+2){ background:var(--lav); }
+  .note-list li:nth-child(3n){ background:var(--mint); }
+
+  /* ---------- our favorites (flip cards) ---------- */
+  .fav-grid{
+    margin-top:8px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+  }
+  @media (max-width:420px){ .fav-grid{ grid-template-columns:1fr; } }
+  .fav-card{ perspective:1000px; height:120px; cursor:pointer; }
+  .fav-inner{
+    position:relative; width:100%; height:100%;
+    transition:transform .55s cubic-bezier(.2,.7,.3,1);
+    transform-style:preserve-3d;
+  }
+  .fav-card.open .fav-inner{ transform:rotateY(180deg); }
+  .fav-front, .fav-back{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border-radius:16px;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center; padding:14px;
+  }
+  .fav-front{
+    background:var(--pink);
+    font-family:'Baloo 2', sans-serif;
+    font-size:.98rem;
+    color:var(--ink);
+  }
+  .fav-card:nth-child(3n+2) .fav-front{ background:var(--lav); }
+  .fav-card:nth-child(3n) .fav-front{ background:var(--mint); }
+  .fav-back{
+    background:var(--hot);
+    color:#fff;
+    font-size:.92rem;
+    transform:rotateY(180deg);
+  }
+
+  /* ---------- envelope / letter ---------- */
+  #letter-card{ text-align:center; cursor:pointer; }
+  #letter-card .hint{ color:var(--ink-soft); font-size:.9rem; }
+  #letter-card.open .hint{ display:none; }
+
+  #letter-body{
+    display:none;
+    text-align:left;
+    font-family:'Baloo 2', sans-serif;
+    font-size:1.08rem;
+    line-height:1.75;
+    color:var(--ink);
+  }
+  #letter-card.open #letter-body{ display:block; }
+  #letter-body p{ margin:0 0 16px; }
+  #letter-body .sign{ color:var(--hot); }
+
+  /* ---------- ending ---------- */
+  #ending{ text-align:center; }
+  #ending .cute{ font-size:1.5rem; line-height:1.5; }
+  #ending .counter{
+    margin-top:30px;
+    font-family:'Baloo 2', sans-serif;
+    color:var(--hot);
+  }
+  #ending .counter b{ display:block; font-size:2.2rem; color:var(--ink); }
+  #ending .final{
+    margin-top:34px;
+    font-family:'Baloo 2', sans-serif;
+    font-size:1.3rem;
+    color:var(--hot);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- HERO -->
+<!-- ============================================================ -->
+<section id="hero">
+  <div class="for">for my favorite person</div>
+  <h1>Happy Birthday,<br><span class="name" id="hero-name">Javier</span>!</h1>
+  <p class="sub" id="hero-sub">a tiny cute corner of the internet, made just for you</p>
+  <button class="cta" onclick="document.getElementById('open').scrollIntoView({behavior:'smooth'})">open your surprise</button>
+</section>
+
+<!-- ============================================================ -->
+<!-- LOVE NOTES -->
+<!-- ============================================================ -->
+<section id="open">
+  <div class="wrap card">
+    <h2 class="note-title">a few things I love about you</h2>
+    <ul class="note-list" id="note-list"></ul>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- OUR FAVORITES -->
+<!-- ============================================================ -->
+<section>
+  <div class="wrap card">
+    <h2 class="note-title">our favorites</h2>
+    <p style="text-align:center; color:var(--ink-soft); font-size:.85rem; margin:-14px 0 20px;">tap a card to reveal the answer</p>
+    <div class="fav-grid" id="fav-grid"></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- LETTER (envelope, click to open) -->
+<!-- ============================================================ -->
+<section>
+  <div class="wrap card" id="letter-card">
+    <div class="hint">tap here to read your letter</div>
+    <div id="letter-body"></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- ENDING -->
+<!-- ============================================================ -->
+<section id="ending">
+  <div class="wrap">
+    <p class="cute" id="ending-text"></p>
+    <p class="final" id="final-line"></p>
+  </div>
+</section>
+
+<script>
+/* ============================================================
+   CONFIG — edit everything here
+   ============================================================ */
+const CONFIG = {
+  hisName: "Javier",
+  anniversaryDate: "2023-02-14", // format YYYY-MM-DD
+
+  heroSubtitle: "a tiny cute corner of the internet, made just for you",
+
+  loveNotes: [
+    "the way you're always so gentle with me",
+    "how safe I feel whenever you're around",
+    "the late night calls that turn into 3am conversations",
+    "mata km lucu HEHEHE",
+    "and... just you, honestly :P"
+  ],
+
+  // Our favorites — tap-to-reveal cards. q = shown first, a = revealed on tap.
+  favorites: [
+    { q: "favorite food", a: "probably Marugame because we ate there A LOT" },
+    { q: "favorite place", a: "wherever it is, as long as we're tgt!" },
+    { q: "first movie together", a: "ADUH APA YAA its either Moana or Toy Story 5 deh" },
+    { q: "song that reminds me of you", a: "tbh BANYAAAK tapi kaynya XXL LANY deh" },
+    { q: "our inside joke", a: "km gembrot (fakta)" },
+    { q: "who said 'I love you' first", a: "YA KM LAH MASA AKU???" }
+  ],
+
+  letter: [
+    "Happy birthday, Javier!",
+    "I don’t think i’ll ever be able to fully put into words how grateful i am for you. Grateful that i get to know you, love you, grow with you, and have you by my side through all the little things and the big ones too.",
+    "Thank you for every little thing you’ve done for me, even the things you probably don’t realize mean so much. Thank you for your patience, your effort, the way you listen to me, the way you make me feel cared for, and for always trying to make me happy in your own ways. I notice them, i appreciate them, and i carry them with me more than you know.",
+    "You've given me so many moments that i’ll always keep close to my heart. And beyond all the gifts, dates, calls, or sweet words, i’m most grateful simply for you, for the person you are and for the love you give me.",
+    "I hope you know how deeply loved and appreciated you are, not only today, but every single day. I'm so proud of you and everything you’re becoming, and i hope this new chapter brings you all the happiness, peace, and love that you deserve.",
+    "Thank you for being you, and thank you for letting me be a part of your life. I'll always be grateful that somehow, out of all the people in this world, i got to meet you.",
+    "Happy birthday, sayang. 🤍<br>i love you more than words can ever explain, and i hope i can keep making you feel even half as loved as you’ve made me feel."
+  ],
+  letterSign: "",
+
+  endingText: "Thank you for being my person sayaang.",
+  finalLine: "I love you. Always."
+};
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+document.getElementById('hero-name').textContent = CONFIG.hisName;
+document.getElementById('hero-sub').textContent = CONFIG.heroSubtitle;
+document.title = "Happy Birthday, " + CONFIG.hisName;
+
+document.getElementById('note-list').innerHTML = CONFIG.loveNotes.map(n => `
+  <li>${n}</li>
+`).join('');
+
+document.getElementById('fav-grid').innerHTML = CONFIG.favorites.map(f => `
+  <div class="fav-card">
+    <div class="fav-inner">
+      <div class="fav-front">${f.q}</div>
+      <div class="fav-back">${f.a}</div>
+    </div>
+  </div>
+`).join('');
+document.querySelectorAll('.fav-card').forEach(card=>{
+  card.addEventListener('click', ()=> card.classList.toggle('open'));
+});
+
+document.getElementById('letter-body').innerHTML =
+  CONFIG.letter.map(p => `<p>${p}</p>`).join('') +
+  `<p class="sign">${CONFIG.letterSign}</p>`;
+
+document.getElementById('letter-card').addEventListener('click', function(){
+  this.classList.toggle('open');
+});
+
+document.getElementById('ending-text').textContent = CONFIG.endingText;
+document.getElementById('final-line').textContent = CONFIG.finalLine;
+
+</script>
+</body>
+</html>
